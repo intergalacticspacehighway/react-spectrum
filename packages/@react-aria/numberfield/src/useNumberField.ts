@@ -26,19 +26,18 @@ import {
 import intlMessages from '../intl/*.json';
 import {isAndroid, isIPhone, mergeProps, useId} from '@react-aria/utils';
 import {NumberFieldState} from '@react-stately/numberfield';
-import {SpinButtonProps, useSpinButton} from '@react-aria/spinbutton';
 import {TextInputDOMProps} from '@react-types/shared';
 import {useFocus} from '@react-aria/interactions';
 import {
   useMessageFormatter,
   useNumberFormatter
 } from '@react-aria/i18n';
+import {useSpinButton} from '@react-aria/spinbutton';
 import {useTextField} from '@react-aria/textfield';
 
-interface NumberFieldProps extends AriaNumberFieldProps, SpinButtonProps {
-  inputRef?:  RefObject<HTMLInputElement>,
-  decrementAriaLabel?: string,
-  incrementAriaLabel?: string
+interface NumberFieldProps extends AriaNumberFieldProps {
+  /** A ref for the input element. */
+  inputRef: RefObject<HTMLInputElement>
 }
 
 interface NumberFieldAria {
