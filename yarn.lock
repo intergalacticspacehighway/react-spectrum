@@ -4330,6 +4330,43 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
+"@react-native-aria/checkbox@^0.2.2-alpha.0":
+  version "0.2.2-alpha.0"
+  resolved "https://registry.yarnpkg.com/@react-native-aria/checkbox/-/checkbox-0.2.2-alpha.0.tgz#c05801e0c35cfff6b4b9629b698490fb9584f7bc"
+  integrity sha512-jUqaOMWxSmjzUHKIaCUgQq7XXaeU1kz6Tv1Q/7oH33oBDSCQ9R3Yb2u3VMtDRu6vSPkw7Z4xREv+3yObvLGSFQ==
+  dependencies:
+    "@react-aria/checkbox" "^3.2.1"
+    "@react-aria/utils" "^3.5.0"
+    "@react-native-aria/toggle" "^0.2.2-alpha.0"
+    "@react-native-aria/utils" "^0.2.1"
+    "@react-stately/toggle" "^3.2.1"
+
+"@react-native-aria/interactions@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@react-native-aria/interactions/-/interactions-0.2.1.tgz#6984809f6fc5f666e9028b3961f958ad87ac161b"
+  integrity sha512-zWa8hz7t5H7aLtXKOpbmjS+1hIH31jAq1qb3+M3aNhUzgnTFmJ/9OuHgyiZBwkr/4nQreQ9RBH24QMGNtEN8kg==
+  dependencies:
+    "@react-aria/interactions" "^3.3.2"
+    "@react-aria/utils" "^3.5.0"
+    "@react-native-aria/utils" "^0.2.1"
+
+"@react-native-aria/toggle@^0.2.2-alpha.0":
+  version "0.2.2-alpha.0"
+  resolved "https://registry.yarnpkg.com/@react-native-aria/toggle/-/toggle-0.2.2-alpha.0.tgz#b50e285c7403fe4475b320297f02904cba73ae4d"
+  integrity sha512-c9SD7hJtzVOOqaj5MDUFHdn/TmYdgXQzdDfJMx2QZtQk8XWcQ7gB/hDuK0BtyjlGXpINvjJycQ0xgX4lz/1JpA==
+  dependencies:
+    "@react-aria/focus" "^3.2.3"
+    "@react-aria/utils" "^3.5.0"
+    "@react-native-aria/interactions" "^0.2.1"
+    "@react-native-aria/utils" "^0.2.1"
+    "@react-stately/toggle" "^3.2.1"
+    "@react-types/checkbox" "^3.2.1"
+
+"@react-native-aria/utils@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@react-native-aria/utils/-/utils-0.2.1.tgz#b12f2981ef937e738a311feb94823534fbdedbf3"
+  integrity sha512-qidrRPA5cQXIH3fJXw3EJiQ1JsyyxK+dzM55jsgAoRq7XbIL8WH9cN1wkkZEm+mINazG/VQ21Nx/hjkPDEzkuA==
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
