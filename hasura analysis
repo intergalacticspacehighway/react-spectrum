@@ -1,0 +1,43 @@
+
+
+The following is an example of a simple boolean expression to restrict access for select to rows where the value in the id column is greater than 10:
+
+const Model = async (req, res) => {
+    const user = req.user;
+    const rules =  {
+        where: {id: user.id},
+        limit: 10,
+    }
+
+    const results = await processQuery(rules);
+
+
+}
+
+
+For example, let’s say you have an object relationship called agent from the authors table to another table called agent (an author can have an agent) and we want to allow users with the role agent to access the details of the authors who they manage in authors table. We can define the following permission rule that uses the aforementioned object relationship:
+
+
+const Model = async (req, res) => {
+    const user = req.user;
+    const rules =  {
+        where: {agent_id: user.id},
+        limit: 10,
+    }
+    const results = await processQuery(rules);
+}
+
+
+
+
+const UserInfo = async (req, res) => {
+    const user = req.user;
+    const rules =  {
+        select: ["id", "phone", "address", "name" , "city"],
+        limit: 10,
+    }
+
+    const results = await processQuery(rules);
+
+
+}
