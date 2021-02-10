@@ -35,11 +35,29 @@ Current proof of concept aims to solve this for web and mobile (Android/iOS).
 
 For other platforms (macOS, Windows), we're exploring possibilities of using Native components that can be customized.
 
-## React Aria
+## Approach
 
 For web, we've used React Aria which provides ARIA attributes and behaviour (keyboard navigation) for commonly used components.
 
 For iOS/Android, we've created similar hooks like React Aria but instead of web-supported ARIA/behaviour, it returns React Native supported accessibility props.
+
+### Why not directly use React aria with react native web?
+
+Spreading props from [React Aria](https://react-spectrum.adobe.com/react-aria/) doesn't always work with react-native-web.
+
+Below props [are not whitelisted](https://github.com/necolas/react-native-web/blob/master/packages/react-native-web/src/exports/View/index.js#L25) to be passed on View.
+
+- role (needs to be passed as accessibilityRole), tabIndex (should be set via ref or using focusable/accessible), id (needs to be passed as nativeID).
+
+- [onKeyDown cannot be passed to Pressable](https://github.com/necolas/react-native-web/issues/1862) - should be set using ref.
+
+This makes sense as they're not valid React native props. If you need all of the above, simply use a div or any html element from React DOM and react-native-web will not complain.
+
+- But this will require platform detection code when you want to create a component library that works on web and mobile.
+
+- Writing platform specific conditions isn't that bad and sometimes essential, but using a div means you won't be able to use RN props e.g. (StyleSheet, onLayout, Animated).
+
+**Note:** Stylesheet can still be used with a div or any html element using [this approach](https://necolas.github.io/react-native-web/docs/?path=/docs/guides-unstable-uses--page).
 
 ## Learn more
 
