@@ -14,9 +14,9 @@ import {SingleSelectListState, useSingleSelectListState} from '@react-stately/li
 import {TabsProps} from '@react-types/tabs';
 import {useEffect} from 'react';
 
-export interface TabsState<T> extends SingleSelectListState<T> {}
+export interface TabListState<T> extends SingleSelectListState<T> {}
 
-export function useTabsState<T extends object>(props: TabsProps<T>): TabsState<T> {
+export function useTabListState<T extends object>(props: TabsProps<T>): TabListState<T> {
   let state = useSingleSelectListState<T>(props);
 
   useEffect(() => {

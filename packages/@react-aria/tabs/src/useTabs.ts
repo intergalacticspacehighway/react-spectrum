@@ -15,21 +15,20 @@ import {HTMLAttributes, Key, RefObject, useMemo} from 'react';
 import {mergeProps, useId, useLabels} from '@react-aria/utils';
 import {SingleSelectListState} from '@react-stately/list';
 import {TabsKeyboardDelegate} from './TabsKeyboardDelegate';
-import {TabsState} from '@react-stately/tabs';
+import {TabListState} from '@react-stately/tabs';
 import {useLocale} from '@react-aria/i18n';
 import {usePress} from '@react-aria/interactions';
 import {useSelectableCollection, useSelectableItem} from '@react-aria/selection';
+import {AriaLabelingProps, DOMProps} from "@react-types/shared";
 
 interface TabsAria {
   /** Props for the tablist container. */
   tabListProps: HTMLAttributes<HTMLElement>,
-  /** Props for the associated tabpanel element. */
-  tabPanelProps: HTMLAttributes<HTMLElement>
 }
 
 const tabsIds = new WeakMap<SingleSelectListState<unknown>, string>();
 
-export function useTabs<T>(props: AriaTabsProps<T>, state: TabsState<T>, ref): TabsAria {
+export function useTabList<T>(props: AriaTabsProps<T>, state: TabListState<T>, ref): TabsAria {
   let {
     orientation = 'horizontal',
     keyboardActivation = 'automatic'
@@ -67,12 +66,6 @@ export function useTabs<T>(props: AriaTabsProps<T>, state: TabsState<T>, ref): T
       role: 'tablist',
       'aria-orientation': orientation,
       tabIndex: undefined
-    },
-    tabPanelProps: {
-      id: generateId(state, selectedKey, 'tabpanel'),
-      'aria-labelledby': generateId(state, selectedKey, 'tab'),
-      tabIndex: 0,
-      role: 'tabpanel'
     }
   };
 }
@@ -120,6 +113,32 @@ export function useTab<T>(
       tabIndex: isDisabled ? undefined : tabIndex,
       role: 'tab'
     }
+  };
+}
+
+interface TabPanelProps {
+    key: Key;
+}
+
+interface AriaTabPanelProps extends TabPanelProps, DOMProps, AriaLabelingProps {}
+
+interface TabPanelAria {
+  tabPanelProps: HTMLAttributes<HTMLElement>;
+}
+  
+export function useTabPanel<T>(
+  props: AriaTabPanelProps,
+  state: TabListState<T>
+): TabPanelAria {
+  const {selectedKey} = state;
+
+  return {
+    tabPanelProps: mergeProps(props, {
+      id: generateId(state, selectedKey, 'tabpanel'),
+      'aria-labelledby': generateId(state, selectedKey, 'tab'),
+      tabIndex: 0,
+      role: 'tabpanel',
+    }),
   };
 }
 

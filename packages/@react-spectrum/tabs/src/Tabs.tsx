@@ -25,8 +25,10 @@ import {useHover} from '@react-aria/interactions';
 import {useLocale} from '@react-aria/i18n';
 import {useProvider, useProviderProps} from '@react-spectrum/provider';
 import {useResizeObserver} from '@react-aria/utils';
-import {useTab, useTabs} from '@react-aria/tabs';
-import {useTabsState} from '@react-stately/tabs';
+import {useTab, useTabList, useTabPanel} from '@react-aria/tabs';
+import {useTabListState} from '@react-stately/tabs';
+
+const TabsContext = React.createContext(null);
 
 function Tabs<T extends object>(props: SpectrumTabsProps<T>, ref: DOMRef<HTMLDivElement>) {
   props = useProviderProps(props);
@@ -42,11 +44,11 @@ function Tabs<T extends object>(props: SpectrumTabsProps<T>, ref: DOMRef<HTMLDiv
   let domRef = useDOMRef(ref);
   let tablistRef = useRef<HTMLDivElement>();
   let wrapperRef = useRef<HTMLDivElement>();
-  let state = useTabsState(props);
+  let state = useTabListState(props);
 
   let {direction} = useLocale();
   let {styleProps} = useStyleProps(otherProps);
-  let {tabListProps, tabPanelProps} = useTabs(props, state, tablistRef);
+  let {tabListProps} = useTabList(props, state, tablistRef);
   let [collapse, setCollapse] = useValueEffect(false);
   let [selectedTab, setSelectedTab] = useState<HTMLElement>();
 
@@ -97,46 +99,57 @@ function Tabs<T extends object>(props: SpectrumTabsProps<T>, ref: DOMRef<HTMLDiv
   // When the tabs are collapsed, the tabPanel should be labelled by the Picker button element.
   let collapsibleTabListId = useId();
   if (collapse && orientation !== 'vertical') {
-    tabPanelProps['aria-labelledby'] = collapsibleTabListId;
+    // tabPanelProps['aria-labelledby'] = collapsibleTabListId;
   }
 
   return (
-    <div
-      {...styleProps}
-      ref={domRef}
-      className={classNames(
-        styles,
-        'spectrum-TabsPanel',
-        `spectrum-TabsPanel--${orientation}`,
-        styleProps.className
-      )}>
-      {orientation === 'vertical' &&
-        <TabList
-          {...tabListProps}
-          ref={tablistRef}
-          orientation={orientation}
-          density={density}
-          isQuiet={isQuiet}
-          isDisabled={isDisabled}
-          state={state}
-          selectedTab={selectedTab} />
-      }
-      {orientation !== 'vertical' &&
-        <CollapsibleTabList
-          {...props}
-          id={collapsibleTabListId}
-          wrapperRef={wrapperRef}
-          collapse={collapse}
-          tabListProps={tabListProps}
-          state={state}
-          selectedTab={selectedTab}
-          ref={tablistRef} />
-      }
-      <div {...tabPanelProps} className={classNames(styles, 'spectrum-TabsPanel-tabpanel')}>
-        {state.selectedItem && state.selectedItem.props.children}
+    <TabsContext.Provider value={{state: state}}>
+      <div
+        {...styleProps}
+        ref={domRef}
+        className={classNames(
+          styles,
+          'spectrum-TabsPanel',
+          `spectrum-TabsPanel--${orientation}`,
+          styleProps.className
+        )}>
+        {orientation === 'vertical' &&
+          <TabList
+            {...tabListProps}
+            ref={tablistRef}
+            orientation={orientation}
+            density={density}
+            isQuiet={isQuiet}
+            isDisabled={isDisabled}
+            state={state}
+            selectedTab={selectedTab} />
+        }
+        {orientation !== 'vertical' &&
+          <CollapsibleTabList
+            {...props}
+            id={collapsibleTabListId}
+            wrapperRef={wrapperRef}
+            collapse={collapse}
+            tabListProps={tabListProps}
+            state={state}
+            selectedTab={selectedTab}
+            ref={tablistRef} />
+        }
+        <TabPanel />
       </div>
-    </div>
+    </TabsContext.Provider>
   );
+}
+
+const TabPanel = (props:any) => {
+  const {state} = React.useContext(TabsContext);
+  const {tabPanelProps} = useTabPanel(props, state);
+
+  return  (
+          <div {...tabPanelProps} className={classNames(styles, 'spectrum-TabsPanel-tabpanel')}>
+              {state.selectedItem && state.selectedItem.props.children}
+          </div>
+        )
 }
 
 interface TabProps<T> extends DOMProps {
@@ -297,13 +310,14 @@ const TabList = React.forwardRef(function <T> (props: TabListProps<T>, ref: Muta
   let {
     isQuiet,
     density,
-    state,
     isDisabled,
     orientation,
     selectedTab,
     className,
     ...otherProps
   } = props;
+
+  const { state } = React.useContext(TabsContext);
 
   return (
     <div
@@ -319,9 +333,13 @@ const TabList = React.forwardRef(function <T> (props: TabListProps<T>, ref: Muta
         },
         className
       )}>
-      {[...state.collection].map((item) => (
-        <Tab key={item.key} item={item} state={state} isDisabled={isDisabled} orientation={orientation} />
-      ))}
+      {[...state.collection].map((node) => {
+        if (node.type === "tabList") {
+          return [...node.childNodes].map(item => {
+            return <Tab key={item.key} item={item} state={state} isDisabled={isDisabled} orientation={orientation} />
+          })
+        }
+      })}
       <TabLine orientation={orientation} selectedTab={selectedTab} />
     </div>
   );

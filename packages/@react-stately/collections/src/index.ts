@@ -15,3 +15,5 @@ export * from './Section';
 export * from './types';
 export * from './useCollection';
 export * from './getItemCount';
+export * from './TabPanels';
+export * from './TabList';

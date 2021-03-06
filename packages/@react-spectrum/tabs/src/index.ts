@@ -13,4 +13,4 @@
 /// <reference types="css-module-types" />
 
 export * from './Tabs';
-export {Item} from '@react-stately/collections';
+export {Item, TabList, TabPanels} from '@react-stately/collections';

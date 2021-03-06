@@ -25,7 +25,7 @@ export class ListCollection<T> implements Collection<Node<T>> {
     let visit = (node: Node<T>) => {
       this.keyMap.set(node.key, node);
 
-      if (node.childNodes && node.type === 'section') {
+      if (node.childNodes && (node.type === 'section' || node.type === 'tabPanel')) {
         for (let child of node.childNodes) {
           visit(child);
         }
