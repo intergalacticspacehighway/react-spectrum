@@ -22,7 +22,9 @@ export function useTabListState<T extends object>(props: TabsProps<T>): TabListS
   useEffect(() => {
     // Ensure a tab is always selected (in case no selected key was specified or if selected item was deleted from collection)
     if (state.selectionManager.isEmpty || !state.collection.getItem(state.selectedKey)) {
-      state.selectionManager.replaceSelection(state.collection.getFirstKey());
+      const tabList = state.collection.getItem(state.collection.getFirstKey()) 
+      const firstItemKey = [...tabList.childNodes][0].key;
+      state.selectionManager.replaceSelection(firstItemKey);
     }
   }, [state.selectionManager, state.selectedKey, state.collection]);
 
